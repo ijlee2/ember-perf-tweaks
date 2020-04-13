@@ -1,88 +1,98 @@
 # Speed
 
-# Improving on build size and making your builds faster
+## Improving build size and time
 
-### Minification, Gzip or Brotli compression and Fingerprinting.
+### Minification, Gzip/Brotli compression, and Fingerprinting
 
 Make sure your builds are done with `production` flag turned on.
 
-    ember b -p
-    # or
-    ember build --prod
-    # or
-    ember build --environment=production
+```
+ember b -p
+# or
+ember build --prod
+# or
+ember build --environment=production
+```
 
-First and foremost, like every asset that the app’s index.html consumes, need to be minified and gzipp’ed. In Ember, your app could be configured to do so using the following lines of code:
+First and foremost, every asset that index.html consumes needs to be minified and compressed. In Ember, your app can be configured to do so using the following lines of code:
 
-    // ember-cli-build.js
-    
-    module.exports = function(defaults) {
-      // ...
-      const isProduction = EmberApp.env() === 'production';
-        
-      let app = new EmberApp(defaults, {
-        fingerprint: {
-          enabled: isProduction // Enabled in production by default until you override.
-        },
-        minifyJS: {
-          enabled: isProduction // Enabled in production by default until you override.
-        },
-        minifyCSS: {
-          enabled: isProduction // Enabled in production by default until you override.
-        }
-      });
-    
-      // ...
-    
-      return app.toTree();
-    };
+```
+// ember-cli-build.js
 
-You don’t have to generally worry about this configuration as Ember takes care of it for you for prod builds.
+module.exports = function(defaults) {
+  // ...
+  const isProduction = EmberApp.env() === 'production';
+    
+  let app = new EmberApp(defaults, {
+    fingerprint: {
+      enabled: isProduction // Enabled in production by default until you override.
+    },
+    minifyJS: {
+      enabled: isProduction // Enabled in production by default until you override.
+    },
+    minifyCSS: {
+      enabled: isProduction // Enabled in production by default until you override.
+    }
+  });
+
+  // ...
+
+  return app.toTree();
+};
+```
+
+You don’t have to generally worry about this configuration since Ember takes care of it for you for prod builds.
 
 ## Analyze bundle size and optimize asset size
 
-`ember-cli-bundle-analyzer` is an Ember CLI addon that analyzes the size and contents of your Ember apps. To try it out check [https://github.com/kaliber5/ember-cli-bundle-analyzer](https://github.com/kaliber5/ember-cli-bundle-analyzer)
+[`ember-cli-bundle-analyzer`](https://github.com/kaliber5/ember-cli-bundle-analyzer) is an Ember CLI addon that analyzes the size and contents of your Ember apps.
 
 It helps you to
 
 - Analyze which individual modules make it into your final bundle
-- Find out how big each contained module is, including the raw source, minified and gzipped sizes
-- Find modules that got there by mistake; and
+- Find out how big each contained module is in raw, minified, and gzipped formats
+- Find unused modules
 - Optimize your bundle size
 
 Install this addon using the following command:
 
-    ember install ember-cli-bundle-analyzer
+```
+ember install ember-cli-bundle-analyzer
+```
 
 Once done, navigate to [http://localhost:4200/_analyze](http://localhost:4200/_analyz) in your web browser to analyze the output.
 
-## Using dependencies that you only need on boot.
+## Using dependencies that you only need on boot
 
-Generally, any npm package that you add, when you use the traditional approach (during the < Ember-2.12 days) of `app.import('node_modules/package/src.js');` in your ember-cli-build.js contributes to increased vendor.js file size. 
+When you use the traditional approach (from Ember 2.12 or before) of `app.import('node_modules/package/src.js');` in your ember-cli-build.js, any npm package that you install leads to an increased vendor.js file size. This is problematic if your Ember app has large packages like lodash-es but you only need _some_ of the lodash methods.
 
-For example, if you would want your Ember app to have 3rd party packages like lodash-es, your app needs the code while using some of the lodash methods. Using `[ember-auto-import](https://github.com/ef4/ember-auto-import)` you can dynamically import these dependencies code at run time.
+With [`ember-auto-import`](https://github.com/ef4/ember-auto-import), you can dynamically import these dependencies code at run time.
 
-Before we get go in depth of this process, let's see our `vendor.js` of the current sample app:
+Before we go in depth, let's see our `vendor.js` of the current sample app:
 
-![Speed/Untitled.png](Speed/Untitled.png)
+TODO: Which sample app are we looking at? Is it always the new Ember app?
 
-It is at 591Kb
+![TODO: Provide description if possible](Speed/Untitled.png)
+
+It is at 591KB.
 
 To get started with ember-auto-import:
 
-    npm install --save-dev lodash-es # Adds lodash-es for example to your dependencies
-    
-    ember install ember-auto-import
+```
+npm install --save-dev lodash-es # Adds lodash-es for example to your dependencies
 
-And go ahead and say in your components or controllers or any parts of your code.
+ember install ember-auto-import
+```
 
-    import { capitalize } from 'lodash-es';
+Try importing capitalize in one of your components or controllers.
 
-Wait, vendor.js just got increased by ~200Kb while doing the above steps 😱
+```
+import { capitalize } from 'lodash-es';
+```
 
-![Speed/Untitled%201.png](Speed/Untitled%201.png)
+vendor.js just increased by ~175KB! 😱
 
-Doing just this, shot the file size to 765Kb!
+![TODO: Provide description if possible](Speed/Untitled%201.png)
 
 Didn't we say we wanted to reduce the vendor.js size? Yes, for which you need to do a little bit more:
 
@@ -92,38 +102,44 @@ Dynamic import is currently a Stage 3 ECMA feature, so to use it there are a few
 
 1. Install babel-eslint
 
-        npm install --save-dev babel-eslint
+```
+npm install --save-dev babel-eslint
+```
 
 2. In your .eslintrc.js file, add
 
-        parser: 'babel-eslint'
+```
+parser: 'babel-eslint'
+```
 
-3. In your ember-cli-build.js file, enable the babel plugin provided by ember-auto-import:
+3. In your ember-cli-build.js file, enable the Babel plugin provided by ember-auto-import:
 
-        let app = new EmberApp(defaults, {
-          babel: {
-            plugins: [ require.resolve('ember-auto-import/babel-plugin') ]
-          }
-        });
+```
+let app = new EmberApp(defaults, {
+  babel: {
+    plugins: [ require.resolve('ember-auto-import/babel-plugin') ]
+  }
+});
+```
 
-4. Now all you need to do is, just dynamically import the dependency. For example:
+4. Finally, dynamically import the dependency. For example,
 
-        import Route from '@ember/routing/route';
-        
-        export default class SampleInnerRoute extends Route {
-          model() { // This will be render-blocking, you can also move this to your controller' or component' JS file
-            return import('lodash-es').then(({ capitalize }) => {
-              return capitalize('Sample App');
-            });
-          }
-        }
+```
+import Route from '@ember/routing/route';
 
-    ![Speed/Untitled%202.png](Speed/Untitled%202.png)
+export default class SampleInnerRoute extends Route {
+  model() { // This will be render-blocking, you can also move this to your controller' or component' JS file
+    return import('lodash-es').then(({ capitalize }) => {
+      return capitalize('Sample App');
+    });
+  }
+}
+```
 
-    Moving to dynamic imports brought it back down to 592Kb.
+    ![TODO: Provide description if possible](Speed/Untitled%202.png)
 
-    For more on this addon, [read here.](https://github.com/ef4/ember-auto-import)
+    Moving to dynamic imports brought the size of vendor.js back down to 592KB.
 
 ## Measure Rendering Performance
 
-Ember's ecosystem comes with a Google Chrome Extension and Mozilla Firefox Addon called "Ember Inspector". One of the important features of the Ember Inspector is "Render Performance". To read more about measuring rendering performance of your Ember apps, [check it out here](https://guides.emberjs.com/release/ember-inspector/render-performance/).
+Ember's ecosystem comes with a Google Chrome Extension and Mozilla Firefox Addon called "Ember Inspector". One of the important features of the Ember Inspector is "Render Performance". To read more about measuring rendering performance of your Ember apps, check out the [Ember.js Guides](https://guides.emberjs.com/release/ember-inspector/render-performance/).

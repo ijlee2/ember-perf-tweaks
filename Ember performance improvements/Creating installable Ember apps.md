@@ -1,78 +1,95 @@
-# Creating installable Ember apps
+# Creating Progressive Web Apps in Ember
 
-To make your Ember app installable, there is yet another simple addon called `[ember-web-app](https://zonkyio.github.io/ember-web-app/)`. So let's go ahead and create a new ember app and add this addon.
+To make your Ember app a Progressive Web App (PWA), you can use an addon called [`ember-web-app`](https://zonkyio.github.io/ember-web-app/).
 
-    ember new ember-app
-    
-    ember install ember-web-app
+## Installation
+
+Let's create a new Ember app and add this addon.
+
+```
+ember new ember-app
+
+ember install ember-web-app
+```
 
 The second command should have installed ember-web-app addon and added config/manifest.js file. You would also see your index.html file modified with these lines
 
-![Creating%20installable%20Ember%20apps/Untitled.png](Creating%20installable%20Ember%20apps/Untitled.png)
+![TODO: Provide description if possible](Creating%20installable%20Ember%20apps/Untitled.png)
 
-Navigate to `config/manifest.js` and you should see a predefined set of values prefilled something like below:
+Navigate to `config/manifest.js` and you should see a predefined set of values:
 
-![Creating%20installable%20Ember%20apps/Untitled%201.png](Creating%20installable%20Ember%20apps/Untitled%201.png)
+![TODO: Provide description if possible](Creating%20installable%20Ember%20apps/Untitled%201.png)
 
-For a list of properties you can use, [check this out](https://zonkyio.github.io/ember-web-app/docs/manifest/available-properties).
+For a list of properties you can use, [check out the documentation](https://zonkyio.github.io/ember-web-app/docs/manifest/available-properties).
 
-Let's run PWA on Lighthouse and see the results. And the following is what you would see
+Let's run PWA on Lighthouse and see the results. The following is what you would see.
 
-![Creating%20installable%20Ember%20apps/Untitled%202.png](Creating%20installable%20Ember%20apps/Untitled%202.png)
+![TODO: Provide description if possible](Creating%20installable%20Ember%20apps/Untitled%202.png)
 
 ## Let's fix the offline pointer.
 
+TODO: Describe what offline pointer is (you seem to be referring to the 2 suggestions under "Fast and reliable") before mentioning service workers. Surround "Caching assets using service workers" with a link to "## Asset Caching".
+
 This is pretty straightforward as stated in "Caching assets using service workers" segment.
 
-    ember install ember-service-worker
-    
-    ember install ember-service-worker-asset-cache
-    
-    ember install ember-service-worker-index
+```
+ember install ember-service-worker
 
-Let's check Lighthouse measurements now and here's what you would see
+ember install ember-service-worker-asset-cache
 
-![Creating%20installable%20Ember%20apps/Untitled%203.png](Creating%20installable%20Ember%20apps/Untitled%203.png)
+ember install ember-service-worker-index
+```
+
+Let's check the Lighthouse measurements again.
+
+![TODO: Provide description if possible](Creating%20installable%20Ember%20apps/Untitled%203.png)
 
 ## More fixes
 
 1. In order to fix "Does not provide fallback content when JavaScript is not available", let's add and that should be green.
 
-        <noscript>Some content here for your page without JavaScript</noscript>
+TODO: To which file and between which lines does this code go?
+
+```
+<noscript>Some content here for your page without JavaScript</noscript>
+```
 
 2. To fix the PNG icon, you can just add an image in your config/manifest.js and it should be resolved. This is the config that I have added to the config/manifest.js. Make sure to replace the images with your Ember app's.
-```
-    'use strict';
-    
-    module.exports = function(/* environment, appConfig */) {
-      // See https://zonkyio.github.io/ember-web-app for a list of
-      // supported properties
-    
-      return {
-        name: "ember-app",
-        short_name: "ember-app",
-        description: "",
-        start_url: "/",
-        display: "standalone",
-        background_color: "#fff",
-        theme_color: "#fff",
-        icons: [{
-          src: 'ember-welcome-page/images/construction.png',
-          sizes: '192x192'
-        }, {
-          src: 'ember-welcome-page/images/construction.png',
-          sizes: '280x280',
-          targets: ['apple']
-        }, {
-          src: 'ember-welcome-page/images/construction.png',
-          sizes: '512x512'
-        }],
-        ms: {
-          tileColor: '#fff'
-        }
-      };
-    }
-```
-Based on the above fixes you should have most green except for the HTTPS redirection.
 
-![Creating%20installable%20Ember%20apps/Untitled%204.png](Creating%20installable%20Ember%20apps/Untitled%204.png)
+```
+// config/manifest.js
+'use strict';
+
+module.exports = function(/* environment, appConfig */) {
+  // See https://zonkyio.github.io/ember-web-app for a list of
+  // supported properties
+
+  return {
+    name: "ember-app",
+    short_name: "ember-app",
+    description: "",
+    start_url: "/",
+    display: "standalone",
+    background_color: "#fff",
+    theme_color: "#fff",
+    icons: [{
+      src: 'ember-welcome-page/images/construction.png',
+      sizes: '192x192'
+    }, {
+      src: 'ember-welcome-page/images/construction.png',
+      sizes: '280x280',
+      targets: ['apple']
+    }, {
+      src: 'ember-welcome-page/images/construction.png',
+      sizes: '512x512'
+    }],
+    ms: {
+      tileColor: '#fff'
+    }
+  };
+}
+```
+
+By making these two fixes, you should have green checkmarks for all but one: HTTPS redirection.
+
+![TODO: Provide description if possible](Creating%20installable%20Ember%20apps/Untitled%204.png)

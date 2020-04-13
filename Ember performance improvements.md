@@ -1,8 +1,6 @@
-# Ember performance improvements
+# Introduction
 
 In this collection you will learn tips and tricks on making your Ember apps faster, accessible and perfectly awesome!
-
-# Introduction
 
 ## What is Ember?
 
@@ -26,7 +24,7 @@ Key areas to optimize Ember apps:
 2. Improving assets cache.
 3. Building and optimising your Ember app for SEO.
 4. Improving accessibility of your Ember apps.
-5. Making your Ember apps installable.
+5. Making your Ember apps a PWA.
 6. Improving your Ember developer build timelines.
 
 ## Building a sample app:
