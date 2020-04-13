@@ -2,23 +2,26 @@
 
 When you run
 ```
-ember b
+ember build
 ```
 
-or 
+or
 
 ```
-ember s
+ember serve
 ```
-the build is run on `development` environment until you mark it as production build by default.
+the build runs on `development` environment by default.
 
-But internally, ember-cli adds the test files as well with your development build since, you can access them using `http://localhost:4200/tests`. But most of the times, we generally run
+Internally, ember-cli adds the test files to your development build so that you can access them using `http://localhost:4200/tests`. But in general, we run
 ```
 ember test
 ```
-for validating test cases. In development build scenario, we would not require test files. In order to eliminate unnecessary set of test files being part of the dev build and slowing things down, you can remove them by using the following configuration
+to validate test cases.
+
+If you want to prevent test files from being included in the dev build and slowing things down, you can use the following configuration:
 
 ```javascript
+// ember-cli-build.js
 let app = new EmberApp(defaults, {
   tests: false,
   ...

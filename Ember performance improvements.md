@@ -6,17 +6,17 @@ In this collection you will learn tips and tricks on making your Ember apps fast
 
 ## What is Ember?
 
-Ember is an ambitious web framework for ambitious web developers. It is free, opensource and always will be. Here’s a [quickstart to learning Ember](https://emberjs.com/learn). In order to get used to this collection, you should be already familiar with Ember and the ecosystem.
+Ember is an ambitious web framework for ambitious web developers. It is, and always will be, free and open-source. Here’s a [quickstart to learning Ember](https://emberjs.com/learn). To get used to this collection, it helps to be already familiar with Ember and its ecosystem.
 
 ## The ecosystem:
 
 1. Ember CLI: Official command line toolkit for developing Ember apps.
 2. Ember Inspector: A browser extension that helps inspect Ember apps.
-3. Ember twiddle: Playground for trying out and experimenting with Ember code on the browser.
+3. Ember Twiddle: Playground for trying out and experimenting with Ember code on the browser.
 4. Ember Engines: An addon that allows multiple logical units of Ember apps to be composed together into a single app from the user’s perspective.
 5. Fastboot: SSR for Ember apps.
-6. Liquid fire: Animation toolkit for Ember apps.
-7. Ember observer: Collection of all Ember addons from the community.
+6. Liquid Fire: Animation toolkit for Ember apps.
+7. Ember Observer: Collection of all Ember addons from the community.
 
 ## Understanding working on Performance for Ember apps
 
